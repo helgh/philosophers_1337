@@ -6,11 +6,46 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:50:32 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/06/24 23:21:06 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/06/25 20:48:49 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static int	check_ov(int sign)
+{
+	if (sign == 1)
+		return (-1);
+	else
+		return (0); 
+}
+
+int	ft_atoi(const char *str)
+{
+	int					i;
+	int					sign;
+	unsigned long int	result;
+
+	i = 0;
+	sign = 1;
+	result = 0;
+	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == 45 || str[i] == 43)
+	{
+		if (str[i] == 45)
+			sign *= -1;
+		i++;
+	}
+	while (str[i] >= 48 && str[i] <= 57)
+	{
+		result = result * 10 + str[i] - 48;
+		i++;
+	}
+	if (result > 9223372036854775807)
+		return (check_ov(sign));
+	return (result * sign);
+}
 
 static int	help_func(int len_str, char **str)
 {
@@ -27,7 +62,7 @@ static int	help_func(int len_str, char **str)
 		{
 			if (str[s][i] >= 48 && str[s][i] <= 57)
 				l = 0;
-			if (str[s][i] != 32 && str[s][i] != 43)
+			if (str[s][i] != 43)
 				if (str[s][i] < 48 || str[s][i] > 57)
 					return (-1);
 			i++;
@@ -53,10 +88,9 @@ int	check_args(int argc, char **argv)
 		while (argv[i][s] != 0)
 		{
 			if (argv[i][s] == 43 && s - 1 >= 0)
-				if (argv[i][s - 1] != 32)
-					return (-1);
+				return (-1);
 			if (argv[i][s] == 43)
-				if (argv[i][++s] == 32 || argv[i][s] == 43 || argv[i][s] == 0)
+				if (argv[i][++s] == 43 || argv[i][s] == 0)
 					return (-1);
 			s++;
 		}
@@ -67,10 +101,36 @@ int	check_args(int argc, char **argv)
 	return (-1);
 }
 
+int	init_struct(t_philo **philo, int argc, char **argv)
+{
+	(*philo)->nop = ft_atoi(argv[1]);
+	(*philo)->ttd = ft_atoi(argv[2]);
+	if ((*philo)->nop == 0 || (*philo)->ttd == 0)
+		return (-1);
+	(*philo)->tte = ft_atoi(argv[3]);
+	(*philo)->tts = ft_atoi(argv[4]);
+	if ((*philo)->tte == 0 || (*philo)->tts == 0)
+		return (-1);
+	if (argc == 6)
+	{
+		(*philo)->notepme = ft_atoi(argv[5]);
+		if ((*philo)->notepme == 0)
+			return (-1);
+	}
+	else
+		(*philo)->notepme = 0;
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
+	t_philo	*philo;
+
 	if (ac != 5 && ac != 6)
 		printf("Error: invalid arguments number\n");
-	if (check_args(ac, av) == -1)
+	philo = (t_philo*) malloc(sizeof(t_philo));
+	if (philo == NULL)
+		exit(EXIT_FAILURE);
+	if (check_args(ac, av) == -1 || init_struct(&philo, ac, av) == -1)
 		printf("Error: invalid arguments\n");
 }
