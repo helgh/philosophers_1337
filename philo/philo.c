@@ -6,18 +6,26 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:50:32 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/06/25 20:48:49 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/06/28 05:00:03 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	print_error(void *ptr, char *str)
+{
+	if (ptr)
+		free(ptr);
+	printf("%s\n", str);
+	exit(EXIT_FAILURE);
+}
 
 static int	check_ov(int sign)
 {
 	if (sign == 1)
 		return (-1);
 	else
-		return (0); 
+		return (0);
 }
 
 int	ft_atoi(const char *str)
@@ -118,7 +126,7 @@ int	init_struct(t_philo **philo, int argc, char **argv)
 			return (-1);
 	}
 	else
-		(*philo)->notepme = 0;
+		(*philo)->notepme = -1;
 	return (0);
 }
 
@@ -127,10 +135,10 @@ int	main(int ac, char **av)
 	t_philo	*philo;
 
 	if (ac != 5 && ac != 6)
-		printf("Error: invalid arguments number\n");
-	philo = (t_philo*) malloc(sizeof(t_philo));
+		print_error(NULL, "Error: invalid arguments number");
+	philo = (t_philo *) malloc (sizeof(t_philo));
 	if (philo == NULL)
-		exit(EXIT_FAILURE);
+		print_error(NULL, "Error: Failed to allocate memory");
 	if (check_args(ac, av) == -1 || init_struct(&philo, ac, av) == -1)
-		printf("Error: invalid arguments\n");
+		print_error(philo, "Error: invalid arguments");
 }
