@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   info.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:50:32 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/06/28 05:00:03 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/01 17:04:26 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,36 +109,36 @@ int	check_args(int argc, char **argv)
 	return (-1);
 }
 
-int	init_struct(t_philo **philo, int argc, char **argv)
+int	init_struct(t_info **info, int argc, char **argv)
 {
-	(*philo)->nop = ft_atoi(argv[1]);
-	(*philo)->ttd = ft_atoi(argv[2]);
-	if ((*philo)->nop == 0 || (*philo)->ttd == 0)
+	(*info)->nop = ft_atoi(argv[1]);
+	(*info)->ttd = ft_atoi(argv[2]);
+	if ((*info)->nop == 0 || (*info)->nop > 200||(*info)->ttd < 60)
 		return (-1);
-	(*philo)->tte = ft_atoi(argv[3]);
-	(*philo)->tts = ft_atoi(argv[4]);
-	if ((*philo)->tte == 0 || (*philo)->tts == 0)
+	(*info)->tte = ft_atoi(argv[3]);
+	(*info)->tts = ft_atoi(argv[4]);
+	if ((*info)->tte < 60 || (*info)->tts < 60)
 		return (-1);
 	if (argc == 6)
 	{
-		(*philo)->notepme = ft_atoi(argv[5]);
-		if ((*philo)->notepme == 0)
+		(*info)->notepme = ft_atoi(argv[5]);
+		if ((*info)->notepme == 0)
 			return (-1);
 	}
 	else
-		(*philo)->notepme = -1;
+		(*info)->notepme = -1;
 	return (0);
 }
 
 int	main(int ac, char **av)
 {
-	t_philo	*philo;
+	t_info	*info;
 
 	if (ac != 5 && ac != 6)
 		print_error(NULL, "Error: invalid arguments number");
-	philo = (t_philo *) malloc (sizeof(t_philo));
-	if (philo == NULL)
+	info = (t_info *) malloc (sizeof(t_info));
+	if (info == NULL)
 		print_error(NULL, "Error: Failed to allocate memory");
-	if (check_args(ac, av) == -1 || init_struct(&philo, ac, av) == -1)
-		print_error(philo, "Error: invalid arguments");
+	if (check_args(ac, av) == -1 || init_struct(&info, ac, av) == -1)
+		print_error(info, "Error: invalid arguments");
 }
