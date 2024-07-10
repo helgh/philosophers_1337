@@ -109,36 +109,44 @@ int	check_args(int argc, char **argv)
 	return (-1);
 }
 
-int	init_struct(t_info **info, int argc, char **argv)
+int	init_struct(t_Gen_info *info, int argc, char **argv)
 {
-	(*info)->nop = ft_atoi(argv[1]);
-	(*info)->ttd = ft_atoi(argv[2]);
-	if ((*info)->nop == 0 || (*info)->nop > 200||(*info)->ttd < 60)
+	info->nop = ft_atoi(argv[1]);
+	info->ttd = ft_atoi(argv[2]);
+	if (info->nop == 0 || info->nop > 200 || info->ttd < 1)
 		return (-1);
-	(*info)->tte = ft_atoi(argv[3]);
-	(*info)->tts = ft_atoi(argv[4]);
-	if ((*info)->tte < 60 || (*info)->tts < 60)
+	info->tte = ft_atoi(argv[3]);
+	info->tts = ft_atoi(argv[4]);
+	if (info->tte < 1 || info->tts < 1)
 		return (-1);
 	if (argc == 6)
 	{
-		(*info)->notepme = ft_atoi(argv[5]);
-		if ((*info)->notepme == 0)
+		info->notepme = ft_atoi(argv[5]);
+		if (info->notepme == 0)
 			return (-1);
 	}
 	else
-		(*info)->notepme = -1;
+		info->notepme = -1;
+	if (pthread_mutex_init(&info->fork_r, NULL) != 0)
+		return (-1);
+	if (pthread_mutex_init(&info->fork_l, NULL) != 0)
+		return (-1);
+	if (pthread_mutex_init(&info->writing, NULL) != 0)
+		return (-1);
+	if (init_philo(info) == -1)
+		return (-1);
 	return (0);
 }
 
 int	main(int ac, char **av)
 {
-	t_info	*info;
+	t_Gen_info	*info;
 
 	if (ac != 5 && ac != 6)
 		print_error(NULL, "Error: invalid arguments number");
-	info = (t_info *) malloc (sizeof(t_info));
+	info = (t_Gen_info *) malloc (sizeof(t_Gen_info));
 	if (info == NULL)
 		print_error(NULL, "Error: Failed to allocate memory");
-	if (check_args(ac, av) == -1 || init_struct(&info, ac, av) == -1)
+	if (check_args(ac, av) == -1 || init_struct(info, ac, av) == -1)
 		print_error(info, "Error: invalid arguments");
 }

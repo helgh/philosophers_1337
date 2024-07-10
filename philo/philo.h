@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:40:04 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/01 19:24:24 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:26:29 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,26 @@
 
 typedef struct s_philo
 {
-	int				id_philo;
-	int				fork;
 	pthread_t		thread;
-	struct s_philo	*next;
+	int				id_philo;
+	int				nbr_eat;
+	size_t			last_eat;
+	size_t			start_eat;
+	t_Gen_info		*general_info;
 }					t_philo;
 
-typedef struct s_info
+typedef struct s_Gen_info
 {
-	int		nop;
-	int		ttd;
-	int		tte;
-	int		tts;
-	int		notepme;
-	t_philo	*philo;
-}				t_info;
+	int				nop;
+	size_t			ttd;
+	size_t			tte;
+	size_t			tts;
+	int				notepme;
+	pthread_mutex_t	fork_r;
+	pthread_mutex_t	fork_l;
+	pthread_mutex_t	writing;
+	t_philo			**philo;
+}				t_Gen_info;
 
 /*--------------------------parsing_function--------------------------*/
 
