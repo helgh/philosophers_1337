@@ -6,13 +6,13 @@
 #    By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/24 20:39:21 by hael-ghd          #+#    #+#              #
-#    Updated: 2024/07/01 17:32:32 by hael-ghd         ###   ########.fr        #
+#    Updated: 2024/07/14 01:54:00 by hael-ghd         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-CC = cc
+CC = cc -g
 
 FLAGS = -Wall -Wextra -Werror
 

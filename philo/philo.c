@@ -109,44 +109,161 @@ int	check_args(int argc, char **argv)
 	return (-1);
 }
 
-int	init_struct(t_Gen_info *info, int argc, char **argv)
+pthread_mutex_t	*init_fork(int nop)
 {
+	pthread_mutex_t	*fork;
+	int	i;
+
+	i = 0;
+	fork = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * nop);
+	if (!fork)
+		return (NULL);
+	while (i++ < nop)
+		pthread_mutex_init(&fork[i], NULL);
+	return (fork);
+}
+
+t_Gen_info	*init_gen_info(char **argv, int argc)
+{
+	t_Gen_info	*info;
+
+	info = malloc(sizeof(t_Gen_info));
+	if (!info)
+		return (NULL);
+	if (pthread_mutex_init(&info->mutex, NULL) != 0)
+		return (NULL);
+	if (pthread_mutex_init(&info->write, NULL) != 0)
+		return (NULL);
 	info->nop = ft_atoi(argv[1]);
 	info->ttd = ft_atoi(argv[2]);
 	if (info->nop == 0 || info->nop > 200 || info->ttd < 1)
-		return (-1);
+		return (NULL);
 	info->tte = ft_atoi(argv[3]);
 	info->tts = ft_atoi(argv[4]);
 	if (info->tte < 1 || info->tts < 1)
-		return (-1);
+		return (NULL);
 	if (argc == 6)
 	{
 		info->notepme = ft_atoi(argv[5]);
 		if (info->notepme == 0)
-			return (-1);
+			return (NULL);
 	}
 	else
 		info->notepme = -1;
-	if (pthread_mutex_init(&info->fork_r, NULL) != 0)
-		return (-1);
-	if (pthread_mutex_init(&info->fork_l, NULL) != 0)
-		return (-1);
-	if (pthread_mutex_init(&info->writing, NULL) != 0)
-		return (-1);
-	if (init_philo(info) == -1)
-		return (-1);
-	return (0);
+	info->died_philo = 0;
+	return (info);
 }
+
+t_philo	*init_struct(int argc, char **argv)
+{
+	pthread_mutex_t	*fork;
+	t_philo			*philos;
+	t_Gen_info		*info;
+	int				i;
+
+	i = -1;
+	fork = init_fork(ft_atoi(argv[1]));
+	info = init_gen_info(argv, argc);
+	if (!info || !fork)
+		return (NULL);
+	philos = (t_philo *) malloc(sizeof(t_philo) * info->nop);
+	if (!philos)
+		return (NULL);
+	while (++i < info->nop)
+	{
+		philos[i].id_philo = i + 1;
+		philos[i].nbr_eat = 0;
+		philos[i].last_eat = 0;
+		philos[i].start_eat = 0;
+		philos[i].fork_l = &fork[i];
+		if (i == 0)
+			philos[i].fork_r = &fork[info->nop - 1];
+		else
+			philos[i].fork_r = &fork[i - 1];
+		philos[i].info = info;
+	}
+	return (philos);
+}
+
+// void	print_action(char *str, t_philo *philo, int time)
+// {
+// 	pthread_mutex_lock(&philo[i].info.write);
+// 	printf("%dms %d %s\n", time, philo[i].id_philo, str);
+// 	pthread_mutex_unlock(&&philo[i].info.write);
+// }
+
+// void	*routine_function(void *info)
+// {
+// 	t_Gen_info *inf = (t_Gen_info *) info;
+// 	struct timeval	time;
+// 	if (inf->philo->id_philo % 2 == 0)
+// 		sleep(2);
+// 	gettimeofday(&time, NULL);
+// 	// while (check_philo(inf) == 0 && check_nbr_eat(inf) == 0)
+// 	// {
+
+// 	// }
+// 	// return (NULL);
+// 	print_action("is sleping", inf, time.tv_sec + (time.tv_usec / 1000000));
+// 	return (info);
+// }
+
+// void	*checker(void *info)
+// {
+// 	t_Gen_info *inf = (t_Gen_info *) info;
+
+// 	while (1)
+// 	{
+// 		if (check_philo(inf) != 0 || check_nbr_eat(inf) != 0)
+// 			break ;
+// 	}
+// 	return (info);
+// }
+
+// int	create_thread(t_philo *philo)
+// {
+// 	int	i;
+// 	int	id_thread;
+// 	// pthread_t	gene;
+
+// 	i = 0;
+// 	id_thread = 0;
+// 	// if (pthread_create(&gene, NULL, checker, (void *) info) != 0)
+// 	// 	return (-1);
+// 	while (i < info->nop)
+// 	{
+// 		if (pthread_create(&info->philo[i].thread, NULL, routine_function, (void*) info) != 0)
+// 			return (-1);
+// 		i++;
+// 	}
+// 	// if (pthread_join(gene, NULL) != 0)
+// 	// 	return (-1);
+// 	i = 0;
+// 	while (i < info->nop)
+// 	{
+// 		if (pthread_join(info->philo[i].thread, NULL) != 0)
+// 			return (-1);
+// 	}
+// 	return (0);
+// }
 
 int	main(int ac, char **av)
 {
-	t_Gen_info	*info;
+	t_philo		*philo;
 
 	if (ac != 5 && ac != 6)
 		print_error(NULL, "Error: invalid arguments number");
-	info = (t_Gen_info *) malloc (sizeof(t_Gen_info));
-	if (info == NULL)
-		print_error(NULL, "Error: Failed to allocate memory");
-	if (check_args(ac, av) == -1 || init_struct(info, ac, av) == -1)
-		print_error(info, "Error: invalid arguments");
+	// info = (t_Gen_info *) malloc (sizeof(t_Gen_info));
+	// if (info == NULL)
+	// 	print_error(NULL, "Error: Failed to allocate memory");
+	if (check_args(ac, av) == -1)
+		print_error(NULL, "Error: invalid arguments");
+	philo = init_struct(ac, av);
+	if (!philo)
+		print_error(philo, "Error: invalid arguments");
+	printf("%d\n", philo[0].id_philo);
+	printf("%d\n", philo[1].id_philo);
+	printf("%d\n", philo[2].id_philo);
+	printf("%d\n", philo[3].id_philo);
+	// create_thread(philo);
 }

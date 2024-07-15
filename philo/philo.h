@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:40:04 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/10 20:26:29 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/15 02:09:30 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,9 @@
 # include <pthread.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <time.h>
+# include <sys/time.h>
 
-typedef struct s_philo
-{
-	pthread_t		thread;
-	int				id_philo;
-	int				nbr_eat;
-	size_t			last_eat;
-	size_t			start_eat;
-	t_Gen_info		*general_info;
-}					t_philo;
 
 typedef struct s_Gen_info
 {
@@ -36,14 +29,33 @@ typedef struct s_Gen_info
 	size_t			tte;
 	size_t			tts;
 	int				notepme;
-	pthread_mutex_t	fork_r;
-	pthread_mutex_t	fork_l;
-	pthread_mutex_t	writing;
-	t_philo			**philo;
+	int				died_philo;
+	pthread_mutex_t	mutex;
+	pthread_mutex_t	write;
 }				t_Gen_info;
+
+typedef struct s_philo
+{
+	pthread_t		thread;
+	int				id_philo;
+	int				nbr_eat;
+	size_t			last_eat;
+	size_t			start_eat;
+	pthread_mutex_t	*fork_l;
+	pthread_mutex_t	*fork_r;
+	t_Gen_info		*info;
+}					t_philo;
+
 
 /*--------------------------parsing_function--------------------------*/
 
-int	check_args(int argc, char **argv);
+int		check_args(int argc, char **argv);
+
+/*--------------------------action_function--------------------------*/
+
+void	print_action(char *str, t_Gen_info *info, int time);
+int		sleeping_philo(t_Gen_info *info);
+int		thinking_philo(t_Gen_info *info);
+int		died_philo(t_Gen_info *info);
 
 #endif
