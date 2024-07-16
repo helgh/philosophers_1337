@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:40:04 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/15 02:09:30 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/16 22:41:42 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ typedef struct s_Gen_info
 	size_t			tts;
 	int				notepme;
 	int				died_philo;
-	pthread_mutex_t	mutex;
+	pthread_mutex_t	dead;
+	pthread_mutex_t	meals;
 	pthread_mutex_t	write;
 }				t_Gen_info;
 

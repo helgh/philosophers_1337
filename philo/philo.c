@@ -130,7 +130,9 @@ t_Gen_info	*init_gen_info(char **argv, int argc)
 	info = malloc(sizeof(t_Gen_info));
 	if (!info)
 		return (NULL);
-	if (pthread_mutex_init(&info->mutex, NULL) != 0)
+	if (pthread_mutex_init(&info->dead, NULL) != 0)
+		return (NULL);
+	if (pthread_mutex_init(&info->meals, NULL) != 0)
 		return (NULL);
 	if (pthread_mutex_init(&info->write, NULL) != 0)
 		return (NULL);
@@ -185,67 +187,59 @@ t_philo	*init_struct(int argc, char **argv)
 	return (philos);
 }
 
-// void	print_action(char *str, t_philo *philo, int time)
+void	*routine_function(void *philo)
+{
+	struct timeval	time;
+
+	sleep(1);
+	t_philo *philos = (t_philo *) philo;
+	if (philos->id_philo % 2 != 0)
+		sleep(1);
+	while (check_if_dead(philo) != 0)
+	{
+		taken_forks(philos);
+		eating_philo(philos);
+		sleeping_philo(philos);
+		thinking_philo(philos);
+	}
+	return (philo);
+}
+
+// void	monitoring(t_philo *philo)
 // {
-// 	pthread_mutex_lock(&philo[i].info.write);
-// 	printf("%dms %d %s\n", time, philo[i].id_philo, str);
-// 	pthread_mutex_unlock(&&philo[i].info.write);
-// }
-
-// void	*routine_function(void *info)
-// {
-// 	t_Gen_info *inf = (t_Gen_info *) info;
-// 	struct timeval	time;
-// 	if (inf->philo->id_philo % 2 == 0)
-// 		sleep(2);
-// 	gettimeofday(&time, NULL);
-// 	// while (check_philo(inf) == 0 && check_nbr_eat(inf) == 0)
-// 	// {
-
-// 	// }
-// 	// return (NULL);
-// 	print_action("is sleping", inf, time.tv_sec + (time.tv_usec / 1000000));
-// 	return (info);
-// }
-
-// void	*checker(void *info)
-// {
-// 	t_Gen_info *inf = (t_Gen_info *) info;
-
 // 	while (1)
 // 	{
 // 		if (check_philo(inf) != 0 || check_nbr_eat(inf) != 0)
 // 			break ;
 // 	}
-// 	return (info);
 // }
 
-// int	create_thread(t_philo *philo)
-// {
-// 	int	i;
-// 	int	id_thread;
-// 	// pthread_t	gene;
+int	create_thread(t_philo *philo)
+{
+	int	i;
 
-// 	i = 0;
-// 	id_thread = 0;
-// 	// if (pthread_create(&gene, NULL, checker, (void *) info) != 0)
-// 	// 	return (-1);
-// 	while (i < info->nop)
-// 	{
-// 		if (pthread_create(&info->philo[i].thread, NULL, routine_function, (void*) info) != 0)
-// 			return (-1);
-// 		i++;
-// 	}
-// 	// if (pthread_join(gene, NULL) != 0)
-// 	// 	return (-1);
-// 	i = 0;
-// 	while (i < info->nop)
-// 	{
-// 		if (pthread_join(info->philo[i].thread, NULL) != 0)
-// 			return (-1);
-// 	}
-// 	return (0);
-// }
+	i = 0;
+	while (i < philo->info->nop)
+	{
+		if (pthread_create(&philo[i].thread, NULL, routine_function, (void*) &philo[i]) != 0)
+			return (-1);
+		
+		i++;
+	}
+	// monitoring(philo);
+	i = 0;
+	while (i < philo->info->nop)
+	{
+		if (pthread_join(&philo[i].thread, NULL) != 0)
+			return (-1);
+	}
+	while (1)
+	{
+		if (check_philo() != 0 || check_nbr_eat() != 0)
+			break ;
+	}
+	return (0);
+}
 
 int	main(int ac, char **av)
 {
@@ -253,17 +247,10 @@ int	main(int ac, char **av)
 
 	if (ac != 5 && ac != 6)
 		print_error(NULL, "Error: invalid arguments number");
-	// info = (t_Gen_info *) malloc (sizeof(t_Gen_info));
-	// if (info == NULL)
-	// 	print_error(NULL, "Error: Failed to allocate memory");
 	if (check_args(ac, av) == -1)
 		print_error(NULL, "Error: invalid arguments");
 	philo = init_struct(ac, av);
 	if (!philo)
 		print_error(philo, "Error: invalid arguments");
-	printf("%d\n", philo[0].id_philo);
-	printf("%d\n", philo[1].id_philo);
-	printf("%d\n", philo[2].id_philo);
-	printf("%d\n", philo[3].id_philo);
-	// create_thread(philo);
+	create_thread(philo);
 }
