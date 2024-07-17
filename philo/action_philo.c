@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 00:24:36 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/17 04:22:55 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/17 07:29:32 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ int	taken_forks_and_eat(t_philo *philo)
 	if (philo[0].info->nop != 1)
 	{
 		pthread_mutex_lock(philo->fork_r);
-		time_ms = get_time() - time_ms;
+		time_ms = get_time() - philo->start_eat;
 		printf("%lums %d %s\n", time_ms, philo->id_philo, str);
 		printf("%lums %d %s\n", time_ms, philo->id_philo, "is eating");
-		usleep(philo[0].info->tte);
-		philo->last_eat = time_ms;
+		philo->last_eat = get_time();
+		sleep_time(philo[0].info->tte);
 		philo->nbr_eat = 1;
 		pthread_mutex_unlock(philo->fork_r);
 	}
@@ -45,7 +45,7 @@ int	sleeping_philo(t_philo *philo)
 	time_ms = get_time() - philo->start_eat;
 	pthread_mutex_lock(&philo->info->write);
 	printf("%lums %d %s\n", time_ms, philo->id_philo, str);
-	usleep(philo->info->tts);
+	sleep_time(philo->info->tts);
 	pthread_mutex_unlock(&philo->info->write);
 	return (0);
 }

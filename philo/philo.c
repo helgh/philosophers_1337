@@ -186,7 +186,7 @@ t_philo	*init_struct(int argc, char **argv)
 	{
 		philos[i].id_philo = i + 1;
 		philos[i].nbr_eat = 0;
-		philos[i].last_eat = 0;
+		philos[i].last_eat = get_time();
 		philos[i].start_eat = get_time();
 		philos[i].fork_l = &fork[i];
 		if (i == 0)
@@ -202,8 +202,8 @@ void	*routine_function(void *philo)
 {
 	t_philo *philos = (t_philo *) philo;
 	if (philos->id_philo % 2 == 0)
-		usleep(100);
-	while (check_if_dead(philo) != 0)
+		sleep_time(100);
+	while (check_if_dead(philo) == 0)
 	{
 		if (philos[0].info->nop != 1)
 		{
@@ -215,42 +215,46 @@ void	*routine_function(void *philo)
 	return (philo);
 }
 
-void	*monitor(void *philo)
-{
-	t_philo	*philos;
+// void	*monitor(void *philo)
+// {
+// 	t_philo	*philos;
 
-	philos = (t_philo *) philo;
-	while (1)
-	{
-		if (check_philo(philos) != 0)
-			break ;
-	}
-	return (philo);
-}
+// 	philos = (t_philo *) philo;
+// 	while (1)
+// 	{
+// 		if (check_philo(philos) != 0)
+// 			break ;
+// 	}
+// 	return (philo);
+// }
 
 int	create_thread(t_philo *philo)
 {
 	int	i;
-	pthread_t	gene;
+	// pthread_t	gene;
 
 	i = 0;
-	if (pthread_create(&gene, NULL, monitor, (void*) &philo[i]) != 0)
-		return (-1);
+	// if (pthread_create(&gene, NULL, monitor, (void*) &philo[i]) != 0)
+	// 	return (-1);
 	while (i < philo->info->nop)
 	{
 		if (pthread_create(&philo[i].thread, NULL, routine_function, (void*) &philo[i]) != 0)
 			return (-1);
-		
 		i++;
-		while (++i < philo[0].info->nop)
-		{
-			if (pthread_join(philo[i].thread, NULL) != 0)
-				return (-1);
-		}
 	}
 	i = -1;
-	if (pthread_join(gene, NULL) != 0)
-		return (-1);
+	// if (pthread_join(gene, NULL) != 0)
+	// 	return (-1);
+	while (++i < philo[0].info->nop)
+	{
+		if (pthread_join(philo[i].thread, NULL) != 0)
+			return (-1);
+	}
+	while (1)
+	{
+		if (check_philo(philo) != 0)
+			break ;
+	}
 	return (0);
 }
 
