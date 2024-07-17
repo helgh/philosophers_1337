@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:40:04 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/16 22:41:42 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/17 04:39:24 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,15 @@ int		check_args(int argc, char **argv);
 
 /*--------------------------action_function--------------------------*/
 
-void	print_action(char *str, t_Gen_info *info, int time);
-int		sleeping_philo(t_Gen_info *info);
-int		thinking_philo(t_Gen_info *info);
-int		died_philo(t_Gen_info *info);
+void	print_action(char *str, t_philo *info, int time);
+int		sleeping_philo(t_philo *info);
+int		taken_forks_and_eat(t_philo *philo);
+int		thinking_philo(t_philo *info);
+int		died_philo(t_philo *info);
+int		check_philo(t_philo *philo);
+int		check_if_dead(t_philo *philo);
+size_t	get_time(void);
+void	sleep_time(size_t time_ms);
+
 
 #endif

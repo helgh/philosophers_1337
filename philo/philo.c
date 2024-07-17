@@ -156,6 +156,17 @@ t_Gen_info	*init_gen_info(char **argv, int argc)
 	return (info);
 }
 
+size_t	get_time(void)
+{
+	size_t			time_ms;
+	struct timeval	time;
+	
+	if (gettimeofday(&time, NULL) != 0)
+		return (-1);
+	time_ms = ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	return (time_ms);
+}
+
 t_philo	*init_struct(int argc, char **argv)
 {
 	pthread_mutex_t	*fork;
@@ -176,7 +187,7 @@ t_philo	*init_struct(int argc, char **argv)
 		philos[i].id_philo = i + 1;
 		philos[i].nbr_eat = 0;
 		philos[i].last_eat = 0;
-		philos[i].start_eat = 0;
+		philos[i].start_eat = get_time();
 		philos[i].fork_l = &fork[i];
 		if (i == 0)
 			philos[i].fork_r = &fork[info->nop - 1];
@@ -189,55 +200,57 @@ t_philo	*init_struct(int argc, char **argv)
 
 void	*routine_function(void *philo)
 {
-	struct timeval	time;
-
-	sleep(1);
 	t_philo *philos = (t_philo *) philo;
-	if (philos->id_philo % 2 != 0)
-		sleep(1);
+	if (philos->id_philo % 2 == 0)
+		usleep(100);
 	while (check_if_dead(philo) != 0)
 	{
-		taken_forks(philos);
-		eating_philo(philos);
-		sleeping_philo(philos);
-		thinking_philo(philos);
+		if (philos[0].info->nop != 1)
+		{
+			taken_forks_and_eat(philos);
+			sleeping_philo(philos);
+			thinking_philo(philos);
+		}
 	}
 	return (philo);
 }
 
-// void	monitoring(t_philo *philo)
-// {
-// 	while (1)
-// 	{
-// 		if (check_philo(inf) != 0 || check_nbr_eat(inf) != 0)
-// 			break ;
-// 	}
-// }
+void	*monitor(void *philo)
+{
+	t_philo	*philos;
+
+	philos = (t_philo *) philo;
+	while (1)
+	{
+		if (check_philo(philos) != 0)
+			break ;
+	}
+	return (philo);
+}
 
 int	create_thread(t_philo *philo)
 {
 	int	i;
+	pthread_t	gene;
 
 	i = 0;
+	if (pthread_create(&gene, NULL, monitor, (void*) &philo[i]) != 0)
+		return (-1);
 	while (i < philo->info->nop)
 	{
 		if (pthread_create(&philo[i].thread, NULL, routine_function, (void*) &philo[i]) != 0)
 			return (-1);
 		
 		i++;
+		while (++i < philo[0].info->nop)
+		{
+			if (pthread_join(philo[i].thread, NULL) != 0)
+				return (-1);
+		}
 	}
-	// monitoring(philo);
-	i = 0;
-	while (i < philo->info->nop)
-	{
-		if (pthread_join(&philo[i].thread, NULL) != 0)
-			return (-1);
-	}
-	while (1)
-	{
-		if (check_philo() != 0 || check_nbr_eat() != 0)
-			break ;
-	}
+	i = -1;
+	if (pthread_join(gene, NULL) != 0)
+		return (-1);
 	return (0);
 }
 
@@ -253,4 +266,5 @@ int	main(int ac, char **av)
 	if (!philo)
 		print_error(philo, "Error: invalid arguments");
 	create_thread(philo);
+	// destroy_thread_and_free(philo);
 }
