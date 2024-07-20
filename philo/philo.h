@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:40:04 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/20 04:02:16 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/20 04:54:42 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,31 @@ typedef struct s_philo
 
 /*--------------------------parsing_function--------------------------*/
 
-int		check_args(int argc, char **argv);
+int				check_args(int argc, char **argv);
+int				a_to_i(const char *str);
+
+/*--------------------------init_function--------------------------*/
+
+t_philo			*init_struct(int argc, char **argv, pthread_mutex_t *fork);
+pthread_mutex_t	*init_fork(int nop);
 
 /*--------------------------action_function--------------------------*/
 
-void	print_action(char *str, t_philo *info, int time);
-int		sleeping_philo(t_philo *info);
-int		taken_forks_and_eat(t_philo *philo);
-int		thinking_philo(t_philo *info);
-int		died_philo(t_philo *info);
-int		check_philo(t_philo *philo);
-int		check_if_dead(t_philo *philo);
-size_t	get_time(void);
-void	sleep_time(size_t time_ms);
-void	ft_print(t_philo *philo, char *str, size_t time_ms);
-int		check_nbr_eat(t_philo *philo);
+int				sleeping_philo(t_philo *info);
+int				taken_forks_and_eat(t_philo *philo);
+int				thinking_philo(t_philo *info);
+int				died_philo(t_philo *info);
+
+/*--------------------------check_functions--------------------------*/
+
+int				check_philo(t_philo *philo);
+int				check_if_dead(t_philo *philo);
+int				check_nbr_eat(t_philo *philo);
+
+/*--------------------------utils_functions--------------------------*/
+
+size_t			get_time(void);
+void			sleep_time(size_t time_ms);
+void			ft_print(t_philo *philo, char *str, size_t time_ms);
 
 #endif

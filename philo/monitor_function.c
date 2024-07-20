@@ -6,11 +6,22 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 06:49:57 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/20 03:55:59 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/20 04:24:05 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+size_t	get_time(void)
+{
+	size_t			time_ms;
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) != 0)
+		return (-1);
+	time_ms = ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	return (time_ms);
+}
 
 void	sleep_time(size_t time_ms)
 {
