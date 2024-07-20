@@ -79,4 +79,5 @@ int	main(int ac, char **av)
 	if (!philo)
 		return (print_error(fork, "Error: invalid arguments"), 1);
 	create_thread(philo);
+	// destroy_mutex_and_free(philo);
 }

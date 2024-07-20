@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 04:16:22 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/20 04:30:37 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/20 06:49:41 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,21 @@ pthread_mutex_t	*init_fork(int nop)
 	pthread_mutex_t	*fork;
 	int				i;
 
-	i = 0;
+	i = -1;
 	if (nop == 0)
 		return (NULL);
 	fork = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * nop);
 	if (!fork)
 		return (NULL);
-	while (i++ < nop)
-		pthread_mutex_init(&fork[i], NULL);
+	while (++i < nop)
+	{
+		if (pthread_mutex_init(&fork[i], NULL) != 0)
+		{
+			while (--i >= 0)
+				pthread_mutex_destroy(&fork[i]);
+			return (free(fork), NULL);
+		}
+	}
 	return (fork);
 }
 
@@ -38,9 +45,13 @@ t_Gen_info	*init_mutex(void)
 	if (pthread_mutex_init(&info->dead, NULL) != 0)
 		return (free(info), NULL);
 	if (pthread_mutex_init(&info->meals, NULL) != 0)
-		return (free(info), NULL);
+		return (pthread_mutex_destroy(&info->dead), free(info), NULL);
 	if (pthread_mutex_init(&info->write, NULL) != 0)
+	{
+		pthread_mutex_destroy(&info->dead);
+		pthread_mutex_destroy(&info->meals);
 		return (free(info), NULL);
+	}
 	return (info);
 }
 
