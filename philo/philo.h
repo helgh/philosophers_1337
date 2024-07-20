@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:40:04 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/20 05:48:46 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/20 08:26:30 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,6 @@ int				check_nbr_eat(t_philo *philo);
 size_t			get_time(void);
 void			sleep_time(size_t time_ms);
 void			ft_print(t_philo *philo, char *str, size_t time_ms);
+void			destroy_mutex_and_free(t_philo *philo);
 
 #endif
