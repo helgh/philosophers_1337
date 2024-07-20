@@ -114,7 +114,7 @@ pthread_mutex_t	*init_fork(int nop)
 	return (fork);
 }
 
-t_Gen_info	*init_gen_info(char **argv, int argc)
+t_Gen_info	*init_mutex(void)
 {
 	t_Gen_info	*info;
 
@@ -127,6 +127,16 @@ t_Gen_info	*init_gen_info(char **argv, int argc)
 		return (free(info), NULL);
 	if (pthread_mutex_init(&info->write, NULL) != 0)
 		return (free(info), NULL);
+	return (info);
+}
+
+t_Gen_info	*init_gen_info(char **argv, int argc)
+{
+	t_Gen_info	*info;
+
+	info = init_mutex();
+	if (!info)
+		return (NULL);
 	info->nop = ft_atoi(argv[1]);
 	info->ttd = ft_atoi(argv[2]);
 	if (info->nop == 0 || info->nop > 200 || info->ttd < 1)

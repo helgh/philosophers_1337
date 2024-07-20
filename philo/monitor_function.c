@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 06:49:57 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/20 00:40:18 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/20 03:55:59 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	check_if_dead(t_philo *philo)
 int	check_philo(t_philo *philo)
 {
 	int				i;
-	size_t				time_ms;
+	size_t			time_ms;
 
 	i = -1;
 	pthread_mutex_lock(&philo[0].info->dead);

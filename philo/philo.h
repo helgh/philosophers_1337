@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:40:04 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/20 00:04:54 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/20 04:02:16 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <stdlib.h>
 # include <time.h>
 # include <sys/time.h>
-
 
 typedef struct s_Gen_info
 {
@@ -47,7 +46,6 @@ typedef struct s_philo
 	t_Gen_info		*info;
 }					t_philo;
 
-
 /*--------------------------parsing_function--------------------------*/
 
 int		check_args(int argc, char **argv);
@@ -61,10 +59,9 @@ int		thinking_philo(t_philo *info);
 int		died_philo(t_philo *info);
 int		check_philo(t_philo *philo);
 int		check_if_dead(t_philo *philo);
-size_t	get_time();
+size_t	get_time(void);
 void	sleep_time(size_t time_ms);
 void	ft_print(t_philo *philo, char *str, size_t time_ms);
 int		check_nbr_eat(t_philo *philo);
-
 
 #endif
