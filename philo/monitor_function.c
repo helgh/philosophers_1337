@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 06:49:57 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/24 05:52:58 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/24 23:22:56 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	check_philo(t_philo *philo)
 	}
 	time_ms = get_time();
 	if (time_ms - philo->last_eat >= philo->info->ttd)
-	{ 
+	{
 		pthread_mutex_lock(&philo->info->dead);
 		died_philo(philo);
 		philo->info->died_philo = -1;
@@ -78,7 +78,7 @@ int	check_nbr_eat(t_philo *philo)
 		pthread_mutex_lock(&philo->info->dead);
 		philo->info->died_philo = -1;
 		pthread_mutex_unlock(&philo->info->dead);
-		return(-1);
+		return (-1);
 	}
 	return (0);
 }
