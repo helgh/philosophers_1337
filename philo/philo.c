@@ -24,7 +24,7 @@ void	ft_print(t_philo *philo, char *str, size_t time_ms)
 	pthread_mutex_lock(&philo->info->dead);
 	time_ms = get_time() - philo->start_eat;
 	if (philo->info->died_philo == 0)
-		printf("%lums %d %s\n", time_ms, philo->id_philo, str);
+		printf("%lu %d %s\n", time_ms, philo->id_philo, str);
 	pthread_mutex_unlock(&philo->info->dead);
 }
 

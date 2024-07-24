@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 00:24:36 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/24 05:43:38 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/24 06:33:29 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ int	died_philo(t_philo *philo)
 	char			*str;
 	size_t			time_ms;
 
-	str = "is died";
+	str = "died";
 	time_ms = get_time() - philo->start_eat;
-	printf("%lums %d \033[0;31m%s\033[0m\n", time_ms, philo->id_philo, str);
+	printf("%lu %d \033[0;31m%s\033[0m\n", time_ms, philo->id_philo, str);
 	return (0);
 }
