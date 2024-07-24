@@ -6,7 +6,7 @@
 #    By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/24 20:39:21 by hael-ghd          #+#    #+#              #
-#    Updated: 2024/07/20 04:33:13 by hael-ghd         ###   ########.fr        #
+#    Updated: 2024/07/24 04:12:14 by hael-ghd         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = philo
 
 CC = cc -g
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 
 SOURCE = philo.c action_philo.c monitor_function.c init_function.c utils_function.c \
 

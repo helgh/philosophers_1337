@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 04:20:22 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/20 06:45:17 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/24 00:05:45 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	destroy_mutex_and_free(t_philo *philo)
 
 	i = -1;
 	while (++i < philo->info->nop)
-		pthread_mutex_destroy(&philo[i].fork_l);
-	pthread_mutex_destroy(&philo[i].info->dead);
-	pthread_mutex_destroy(&philo[i].info->write);
-	pthread_mutex_destroy(&philo[i].info->meals);
+		pthread_mutex_destroy(philo[i].fork_l);
+	free(philo->fork_l);
+	pthread_mutex_destroy(&philo->info->dead);
+	pthread_mutex_destroy(&philo->info->meals);
 	free(philo->info);
 	free(philo);
 }

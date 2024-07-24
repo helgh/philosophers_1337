@@ -21,10 +21,11 @@ void	print_error(void *ptr, char *str)
 
 void	ft_print(t_philo *philo, char *str, size_t time_ms)
 {
-	pthread_mutex_lock(&philo->info->write);
+	pthread_mutex_lock(&philo->info->dead);
+	time_ms = get_time() - philo->start_eat;
 	if (philo->info->died_philo == 0)
 		printf("%lums %d %s\n", time_ms, philo->id_philo, str);
-	pthread_mutex_unlock(&philo->info->write);
+	pthread_mutex_unlock(&philo->info->dead);
 }
 
 void	*routine_function(void *philo)
@@ -32,10 +33,9 @@ void	*routine_function(void *philo)
 	t_philo	*philos;
 
 	philos = (t_philo *) philo;
-	usleep(8 * philos[0].info->nop + (philos[0].info->nop * 2));
 	if (philos->id_philo % 2 == 0)
-		usleep(100);
-	while (check_if_dead(philo) == 0)
+		usleep(300);
+	while (check_if_dead(philos) == 0 && philos->info->nop > 1)
 	{
 		taken_forks_and_eat(philos);
 		sleeping_philo(philos);
@@ -50,16 +50,23 @@ int	create_thread(t_philo *philo)
 
 	i = -1;
 	while (++i < philo->info->nop)
+	{
 		if (pthread_create(&philo[i].thread, NULL,
 				routine_function, (void*) &philo[i]) != 0)
 			return (-1);
-	while (1)
-		if (check_philo(philo) != 0 || check_nbr_eat(philo) != 0)
-			break ;
-	i = -1;
-	while (++i < philo[0].info->nop)
-		if (pthread_join(philo[i].thread, NULL) != 0)
+		if (pthread_detach(philo[i].thread) != 0)
 			return (-1);
+	}
+	i = -1;
+	while (++i < philo->info->nop)
+	{
+		pthread_mutex_lock(&philo->info->meals);
+		if (check_philo(&philo[i]) != 0)
+			break ;
+		pthread_mutex_unlock(&philo->info->meals);
+		if (i == philo->info->nop - 1)
+			i = -1;
+	}
 	return (0);
 }
 

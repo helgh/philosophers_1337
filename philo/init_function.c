@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 04:16:22 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/20 06:49:41 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/24 00:03:27 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,6 @@ t_Gen_info	*init_mutex(void)
 		return (free(info), NULL);
 	if (pthread_mutex_init(&info->meals, NULL) != 0)
 		return (pthread_mutex_destroy(&info->dead), free(info), NULL);
-	if (pthread_mutex_init(&info->write, NULL) != 0)
-	{
-		pthread_mutex_destroy(&info->dead);
-		pthread_mutex_destroy(&info->meals);
-		return (free(info), NULL);
-	}
 	return (info);
 }
 
@@ -79,6 +73,7 @@ t_Gen_info	*init_gen_info(char **argv, int argc)
 	else
 		info->notepme = -1;
 	info->died_philo = 0;
+	info->t_eat = 0;
 	return (info);
 }
 
