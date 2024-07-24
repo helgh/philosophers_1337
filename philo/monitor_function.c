@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 06:49:57 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/24 05:46:52 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/24 05:52:58 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	check_philo(t_philo *philo)
 	size_t			time_ms;
 
 	i = -1;
-	if (check_nbr_eat(philo) == -1)
+	if (check_nbr_eat(philo) != 0)
 		return (-1);
 	if (philo->info->nop == 1)
 	{
