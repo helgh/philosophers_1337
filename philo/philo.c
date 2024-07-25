@@ -37,7 +37,7 @@ void	*routine_function(void *philo)
 	philos = (t_philo *) philo;
 	if (philos->id_philo % 2 == 0)
 		usleep(300);
-	while (check_if_dead(philos) == 0 && philos->info->nop > 1)
+	while (philos->info->nop > 1)
 	{
 		taken_forks_and_eat(philos);
 		sleeping_philo(philos);
