@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 06:49:57 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/24 23:22:56 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/25 06:57:50 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,13 @@ void	sleep_time(size_t time_ms)
 
 int	check_if_dead(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->info->dead);
 	if (philo->info->died_philo != 0)
+	{
+		pthread_mutex_unlock(&philo->info->dead);
 		return (-1);
+	}
+	pthread_mutex_unlock(&philo->info->dead);
 	return (0);
 }
 
@@ -60,7 +65,7 @@ int	check_philo(t_philo *philo)
 		pthread_mutex_lock(&philo->info->dead);
 		died_philo(philo);
 		philo->info->died_philo = -1;
-		pthread_mutex_unlock(&philo->info->dead);
+		//pthread_mutex_unlock(&philo->info->dead);
 		return (-1);
 	}
 	return (0);
@@ -77,7 +82,7 @@ int	check_nbr_eat(t_philo *philo)
 	{
 		pthread_mutex_lock(&philo->info->dead);
 		philo->info->died_philo = -1;
-		pthread_mutex_unlock(&philo->info->dead);
+		//pthread_mutex_unlock(&philo->info->dead);
 		return (-1);
 	}
 	return (0);

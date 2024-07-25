@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 00:24:36 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/24 06:33:29 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/25 02:58:47 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,15 @@
 int	taken_forks_and_eat(t_philo *philo)
 {
 	char			*str;
-	size_t			time_ms;
 
 	str = "has taken a fork";
 	pthread_mutex_lock(philo->fork_l);
-	time_ms = 0;
-	ft_print(philo, str, time_ms);
+	ft_print(philo, str);
 	if (philo->info->nop != 1)
 	{
 		pthread_mutex_lock(philo->fork_r);
-		time_ms = 0;
-		ft_print(philo, str, time_ms);
-		ft_print(philo, "is eating", time_ms);
+		ft_print(philo, str);
+		ft_print(philo, "is eating");
 		pthread_mutex_lock(&philo->info->meals);
 		philo->last_eat = get_time();
 		philo->nbr_eat += 1;
@@ -43,11 +40,9 @@ int	taken_forks_and_eat(t_philo *philo)
 int	sleeping_philo(t_philo *philo)
 {
 	char			*str;
-	size_t			time_ms;
 
 	str = "is sleeping";
-	time_ms = 0;
-	ft_print(philo, str, time_ms);
+	ft_print(philo, str);
 	sleep_time(philo->info->tts);
 	return (0);
 }
@@ -55,11 +50,9 @@ int	sleeping_philo(t_philo *philo)
 int	thinking_philo(t_philo *philo)
 {
 	char			*str;
-	size_t			time_ms;
 
 	str = "is thinking";
-	time_ms = 0;
-	ft_print(philo, str, time_ms);
+	ft_print(philo, str);
 	return (0);
 }
 

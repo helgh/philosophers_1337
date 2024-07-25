@@ -19,8 +19,10 @@ void	print_error(void *ptr, char *str)
 	printf("%s\n", str);
 }
 
-void	ft_print(t_philo *philo, char *str, size_t time_ms)
+void	ft_print(t_philo *philo, char *str)
 {
+	size_t	time_ms;
+
 	pthread_mutex_lock(&philo->info->dead);
 	time_ms = get_time() - philo->start_eat;
 	if (philo->info->died_philo == 0)
@@ -41,7 +43,7 @@ void	*routine_function(void *philo)
 		sleeping_philo(philos);
 		thinking_philo(philos);
 	}
-	return (philo);
+	return (NULL);
 }
 
 int	create_thread(t_philo *philo)
@@ -62,7 +64,7 @@ int	create_thread(t_philo *philo)
 	{
 		pthread_mutex_lock(&philo->info->meals);
 		if (check_philo(&philo[i]) != 0)
-			break ;
+			return (pthread_mutex_unlock(&philo->info->meals), 0);
 		pthread_mutex_unlock(&philo->info->meals);
 		if (i == philo->info->nop - 1)
 			i = -1;
