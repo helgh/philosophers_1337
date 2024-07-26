@@ -6,13 +6,14 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 04:20:22 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/26 02:16:08 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/26 02:19:22 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	destroy_mutex_and_free(t_philo *philo, pthread_mutex_t *fork, char **argv)
+void	destroy_mutex_and_free(t_philo *philo,
+			pthread_mutex_t *fork, char **argv)
 {
 	int	i;
 
