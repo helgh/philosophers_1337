@@ -6,24 +6,30 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 04:20:22 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/24 00:05:45 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/26 02:16:08 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	destroy_mutex_and_free(t_philo *philo)
+void	destroy_mutex_and_free(t_philo *philo, pthread_mutex_t *fork, char **argv)
 {
 	int	i;
 
 	i = -1;
-	while (++i < philo->info->nop)
-		pthread_mutex_destroy(philo[i].fork_l);
-	free(philo->fork_l);
-	pthread_mutex_destroy(&philo->info->dead);
-	pthread_mutex_destroy(&philo->info->meals);
-	free(philo->info);
-	free(philo);
+	if (fork)
+	{
+		while (++i < a_to_i(argv[1]))
+			pthread_mutex_destroy(&fork[i]);
+		free(fork);
+	}
+	if (philo)
+	{
+		pthread_mutex_destroy(&philo->info->dead);
+		pthread_mutex_destroy(&philo->info->meals);
+		free(philo->info);
+		free(philo);
+	}
 }
 
 int	a_to_i(const char *str)

@@ -6,7 +6,7 @@
 /*   By: hael-ghd <hael-ghd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 04:16:22 by hael-ghd          #+#    #+#             */
-/*   Updated: 2024/07/24 00:03:27 by hael-ghd         ###   ########.fr       */
+/*   Updated: 2024/07/26 02:12:11 by hael-ghd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ pthread_mutex_t	*init_fork(int nop)
 	i = -1;
 	if (nop == 0)
 		return (NULL);
-	fork = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * nop);
+	fork = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * (nop + 1));
 	if (!fork)
 		return (NULL);
 	while (++i < nop)

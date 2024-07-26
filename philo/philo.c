@@ -86,7 +86,10 @@ int	main(int ac, char **av)
 		return (print_error(NULL, "Error: invalid arguments"), 1);
 	philo = init_struct(ac, av, fork);
 	if (!philo)
+	{
+		destroy_mutex_and_free(NULL, fork, av);
 		return (print_error(fork, "Error: invalid arguments"), 1);
+	}
 	create_thread(philo);
-	destroy_mutex_and_free(philo);
+	destroy_mutex_and_free(philo, fork, av);
 }
